@@ -118,7 +118,7 @@ public partial class Image
         Enums.BandFormat format) where T : unmanaged
     {
         var handle = data.Pin();
-        var vi = VipsImage.NewFromMemory(handle.Pointer, (nuint)data.Length, width, height, bands,
+        var vi = VipsImage.NewFromMemory(handle.Pointer, (nuint)data.Length * (nuint)sizeof(T), width, height, bands,
             format);
         if (vi == IntPtr.Zero)
         {
@@ -155,7 +155,7 @@ public partial class Image
     {
         fixed (T* dataFixed = data)
         {
-            var vi = VipsImage.NewFromMemoryCopy(dataFixed, (nuint)data.Length, width, height, bands, format);
+            var vi = VipsImage.NewFromMemoryCopy(dataFixed, (nuint)data.Length * (nuint)sizeof(T), width, height, bands, format);
             if (vi == IntPtr.Zero)
             {
                 throw new VipsException("unable to make image from memory");
